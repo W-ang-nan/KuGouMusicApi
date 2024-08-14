@@ -6,7 +6,6 @@ const { cookieToJson } = require('./util/util');
 const { createRequest } = require('./util/request');
 const dotenv = require('dotenv');
 const cache = require('./util/apicache').middleware;
-const cors = require('cors');
 
 /**
  * @typedef {{
@@ -59,9 +58,8 @@ async function getModulesDefinitions(modulesPath, specificRoute, doRequire = tru
  */
 async function consturctServer(moduleDefs) {
   const app = express();
-  const { CORS_ALLOW_ORIGIN } = process.env;
+  // const { CORS_ALLOW_ORIGIN } = process.env;
   app.set('trust proxy', true);
-  app.use(cors());
 
   /**
    * CORS & Preflight request
@@ -70,7 +68,7 @@ async function consturctServer(moduleDefs) {
     if (req.path !== '/' && !req.path.includes('.')) {
       res.set({
         'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Origin': CORS_ALLOW_ORIGIN || req.headers.origin || '*',
+        'Access-Control-Allow-Origin': req.headers.origin || '*',
         'Access-Control-Allow-Headers': 'X-Requested-With,Content-Type',
         'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
         'Content-Type': 'application/json; charset=utf-8',
