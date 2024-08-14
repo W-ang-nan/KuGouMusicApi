@@ -6,6 +6,7 @@ const { cookieToJson } = require('./util/util');
 const { createRequest } = require('./util/request');
 const dotenv = require('dotenv');
 const cache = require('./util/apicache').middleware;
+const cors = require('cors');
 
 /**
  * @typedef {{
@@ -17,9 +18,9 @@ const cache = require('./util/apicache').middleware;
 
 /**
  * @typedef {{
-*  server?: import('http').Server,
-* }} ExpressExtension
-*/
+ *  server?: import('http').Server,
+ * }} ExpressExtension
+ */
 
 const envPath = path.join(process.cwd(), '.env');
 if (fs.existsSync(envPath)) {
@@ -60,6 +61,7 @@ async function consturctServer(moduleDefs) {
   const app = express();
   const { CORS_ALLOW_ORIGIN } = process.env;
   app.set('trust proxy', true);
+  app.use(cors());
 
   /**
    * CORS & Preflight request
@@ -203,7 +205,7 @@ async function startService() {
 
   const app = await consturctServer();
 
-   /** @type {import('express').Express & ExpressExtension} */
+  /** @type {import('express').Express & ExpressExtension} */
   const appExt = app;
 
   appExt.service = app.listen(port, host, () => {
