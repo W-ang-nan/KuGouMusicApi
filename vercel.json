@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "/"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://wangnan.asia/$1",
+      "permanent": true
+    }
   ]
 }
